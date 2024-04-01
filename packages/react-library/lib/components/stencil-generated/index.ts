@@ -5,6 +5,6 @@ import { createReactComponent } from './react-component-lib';
 
 import type { JSX } from 'stencil-library';
 
-import { defineCustomElement as defineMyComponent } from 'stencil-library/components/my-component.js';
 
-export const MyComponent = /*@__PURE__*/createReactComponent<JSX.MyComponent, HTMLMyComponentElement>('my-component', undefined, undefined, defineMyComponent);
+
+export const MyComponent = /*@__PURE__*/createReactComponent<JSX.MyComponent, HTMLMyComponentElement>('my-component');
