@@ -1,25 +1,30 @@
 {
   "name": "react-library",
-  "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Alice Pote <alice.writes.wrongs@gmail.com>",
   "homepage": "",
   "license": "ISC",
-  "main": "lib/react-library.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "scripts": {
-    "test": "node ./__tests__/react-library.test.js"
-  },
   "devDependencies": {
     "@types/react": "^18.2.73",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.4.3"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "test": "node ./__tests__/react-library.test.js",
+    "build": "npm run tsc",
+    "tsc": "tsc -p . --outDir ./dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "stencil-library": "*"
   }
 }
