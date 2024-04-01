@@ -1,3 +1,5 @@
+'use client'
+
 /* eslint-disable */
 /* tslint:disable */
 /* auto-generated react proxies */

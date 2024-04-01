@@ -11,6 +11,7 @@ export const config: Config = {
     reactOutputTarget({
       componentCorePackage: 'stencil-library',
       proxiesFile: '../react-library/lib/components/stencil-generated/index.ts',
+      reactServerComponents: true,
     }),
   ],
   testing: {

@@ -13,6 +13,7 @@
     "node": "20.12.0"
   },
   "scripts": {
-    "start": "lerna run build --scope stencil-library --scope react-library && lerna run dev"
+    "start": "lerna run build && lerna run start --scope next-app",
+    "dev": "lerna run build --scope stencil-library --scope react-library && lerna run dev"
   }
 }
