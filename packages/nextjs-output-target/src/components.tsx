@@ -103,7 +103,9 @@ export default async function ${pascalName} (props) {
   const templateTag = html.match(templateRegex)[0];
 
   const ${lazyPascalName} = dynamic(() => import("./${wrappedComponentName}.js"), {
-    loading: () => <div dangerouslySetInnerHTML={{ __html: styleTag + templateTag }} />
+    loading: () => htmlToReactElements(
+      "<div>" + styleTag + templateTag + "</div>"
+    )
   });
   return <${lazyPascalName} />;
 }

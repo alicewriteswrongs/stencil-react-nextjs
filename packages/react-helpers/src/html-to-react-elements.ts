@@ -17,27 +17,42 @@ export function htmlToReactElements(html: string) {
   return elToReactElement(root);
 }
 
+// TODO need to sort out _something_ in here which has to do with comments I think
 function elToReactElement(
   el: Element | null,
-): ReturnType<typeof createElement> | string {
+): ReturnType<typeof createElement> | string | null {
   if (!el) {
-    // @ts-ignore
     return null;
   }
   // if it's a text child
-  if (el.name === "text") {
+  // @ts-ignore
+  if (el.type === "text") {
     return (el as unknown as Text).data;
   }
 
   // @ts-ignore
-  if (el.type === "html") {
-    return elToReactElement(el.firstChild as Element | null);
+  if (el?.type === "comment") {
+    return null;
   }
+
+  if (!el.name) {
+    console.log(el);
+    return null;
+  }
+
+  // this is one of the reasons we want to transform the HTML into React
+  // elements
+  const attributes = {
+    suppressHydrationWarning: true,
+  };
+  el.attributes?.map((attr) => {
+    attributes[attr.name] = attr.value;
+  });
 
   return createElement(
     el.name,
     // TODO transform props here
-    { name: "Test Name" },
+    attributes,
     // children may be undefined
     handleChildren(el),
   );
