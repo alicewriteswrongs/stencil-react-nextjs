@@ -1,9 +1,7 @@
-export function htmlToReactJSX () {
+export function htmlToReactJSX() {
   return "test";
 }
 
-export function reactPropsToStencilHTML () {
+export function reactPropsToStencilHTML() {
   return "test";
 }
-
-

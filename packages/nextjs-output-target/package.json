@@ -1,5 +1,5 @@
 {
-  "name": "react-helpers",
+  "name": "nextjs-output-target",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,5 +12,8 @@
   "license": "ISC",
   "volta": {
     "node": "20.12.0"
+  },
+  "dependencies": {
+    "react-helpers": "*"
   }
 }
