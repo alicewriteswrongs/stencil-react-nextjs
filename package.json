@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "lerna run build && lerna run start --scope next-app",
-    "dev": "lerna run build --scope stencil-library --scope react-library && lerna run dev",
+    "dev": "lerna run build && lerna run dev",
     "prettier": "lerna run prettier"
   }
 }

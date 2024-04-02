@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:next": "next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write --print-width 80 \"*.mjs\" \"*.json\" \"src/**/*.tsx\" \"*.ts\""
