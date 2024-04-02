@@ -16,7 +16,7 @@ export const mergeRefs = (...refs) => {
 };
 export const createForwardRef = (ReactComponent, displayName) => {
     const forwardRef = (props, ref) => {
-        return React.createElement(ReactComponent, Object.assign({}, props, { forwardedRef: ref }));
+        return React.createElement(ReactComponent, { ...props, forwardedRef: ref });
     };
     forwardRef.displayName = displayName;
     return React.forwardRef(forwardRef);
