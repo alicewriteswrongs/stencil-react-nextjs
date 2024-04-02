@@ -2,6 +2,7 @@
   "name": "nextjs-output-target",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -14,6 +15,9 @@
     "node": "20.12.0"
   },
   "dependencies": {
-    "react-helpers": "*"
+    "react-helpers": "*",
+    "@types/react": "^18.2.73",
+    "react": "^18.2.0",
+    "typescript": "^5.4.3"
   }
 }

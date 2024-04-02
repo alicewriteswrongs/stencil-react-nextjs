@@ -1,7 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "jsx": "react",
+    "module": "es2022",
+    "moduleResolution": "bundler"
   },
   "include": ["src"]
 }
