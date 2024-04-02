@@ -1,16 +1,23 @@
 import dynamic from 'next/dynamic'
-import { headers } from 'next/headers.js';
 import { reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'
+import { renderToString } from './hydrate';
+
+const STYLE_REGEX = /<style.+<\/style>/;
 
 export default async function MyComponent (props) {
-  // PLACEHOLDER
-  const html = "<div>SERVER HTML</div>";
+  // TODO
+  // dynamic insert the right props here
+  const rawHTML = '<my-component name="what!!!"></my-component>';
+  const { html } = await renderToString(rawHTML);
 
-  const LazyMyComponent = dynamic(async () => import("./MyComponentWrapped.js"), {
-    loading: () => <div>damn it</div>
+  const styleTag = html.match(STYLE_REGEX)?.[0];
+
+  const templateRegex = new RegExp("<my-component.+</my-component>")
+
+  const templateTag = html.match(templateRegex)[0];
+
+  const LazyMyComponent = dynamic(() => import("./MyComponentWrapped.js"), {
+    loading: () => <div dangerouslySetInnerHTML={{ __html: styleTag + templateTag }} />
   });
-
-  headers();
-
   return <LazyMyComponent />;
 }

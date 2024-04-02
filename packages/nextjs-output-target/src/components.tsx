@@ -53,12 +53,14 @@ async function emitClientComponent(
 
   lines.push(`
 // TODO add type stuff here (we're going to just output JS to get started)
-export default ${wrappedComponentName} = /*@__PURE__*/createReactComponent(
+const ${wrappedComponentName} = /*@__PURE__*/createReactComponent(
   '${component.tagName}',
   undefined,
   undefined,
   ${defineFunctionName}
-);`);
+);
+export default ${wrappedComponentName};
+`);
   const modulePath = join(outputTarget.outDir, `${wrappedComponentName}.js`);
   await writeFile(modulePath, lines.join("\n"));
   return wrappedComponentName;
@@ -82,14 +84,26 @@ async function emitServerComponent(
     `import { reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'`,
   );
 
-  // TODO add import for hydrate app
+  // add import for hydrate app
+  lines.push(`import { renderToString } from './hydrate';`);
+
   lines.push(`
+const STYLE_REGEX = /<style.+<\\/style>/;
+
 export default async function ${pascalName} (props) {
-  // PLACEHOLDER
-  const html = "<div>SERVER HTML</div>";
+  // TODO
+  // dynamic insert the right props here
+  const rawHTML = '<${component.tagName} name="what!!!"></${component.tagName}>';
+  const { html } = await renderToString(rawHTML);
+
+  const styleTag = html.match(STYLE_REGEX)?.[0];
+
+  const templateRegex = new RegExp("<${component.tagName}.+</${component.tagName}>")
+
+  const templateTag = html.match(templateRegex)[0];
 
   const ${lazyPascalName} = dynamic(() => import("./${wrappedComponentName}.js"), {
-    loading: () => renderedHTMLToJSX(html)
+    loading: () => <div dangerouslySetInnerHTML={{ __html: styleTag + templateTag }} />
   });
   return <${lazyPascalName} />;
 }

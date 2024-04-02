@@ -1,6 +1,7 @@
 import type { Config, OutputTargetCustom } from "@stencil/core/internal";
 import { emitNextJSComponents } from "./components";
 import { OutputTargetNextJS } from "./types";
+import { copyHydrateScript } from "./hydrate-script";
 
 export function nextJSOutputTarget(
   outputTarget: OutputTargetNextJS,
@@ -17,6 +18,7 @@ export function nextJSOutputTarget(
     async generator(config, compilerCtx, buildCtx) {
       const timespan = buildCtx.createTimeSpan(`generate react started`, true);
 
+      await copyHydrateScript(outputTarget);
       await emitNextJSComponents(config, compilerCtx, outputTarget, buildCtx);
 
       timespan.finish(`generate react finished`);

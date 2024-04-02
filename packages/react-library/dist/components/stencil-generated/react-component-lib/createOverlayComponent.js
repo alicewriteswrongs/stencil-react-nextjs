@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { attachProps, dashToPascalCase, defineCustomElement, setRef } from './utils';
+import React from "react";
+import ReactDOM from "react-dom";
+import { attachProps, dashToPascalCase, defineCustomElement, setRef, } from "./utils";
 export const createOverlayComponent = (tagName, controller, customElement) => {
     defineCustomElement(tagName, customElement);
     const displayName = dashToPascalCase(tagName);
@@ -14,8 +14,8 @@ export const createOverlayComponent = (tagName, controller, customElement) => {
         el;
         constructor(props) {
             super(props);
-            if (typeof document !== 'undefined') {
-                this.el = document.createElement('div');
+            if (typeof document !== "undefined") {
+                this.el = document.createElement("div");
             }
             this.handleDismiss = this.handleDismiss.bind(this);
         }
@@ -39,7 +39,9 @@ export const createOverlayComponent = (tagName, controller, customElement) => {
             setRef(this.props.forwardedRef, null);
         }
         shouldComponentUpdate(nextProps) {
-            if (this.overlay && nextProps.isOpen !== this.props.isOpen && nextProps.isOpen === false) {
+            if (this.overlay &&
+                nextProps.isOpen !== this.props.isOpen &&
+                nextProps.isOpen === false) {
                 isDismissing = true;
             }
             return true;
@@ -48,10 +50,13 @@ export const createOverlayComponent = (tagName, controller, customElement) => {
             if (this.overlay) {
                 attachProps(this.overlay, this.props, prevProps);
             }
-            if (prevProps.isOpen !== this.props.isOpen && this.props.isOpen === true) {
+            if (prevProps.isOpen !== this.props.isOpen &&
+                this.props.isOpen === true) {
                 this.present(prevProps);
             }
-            if (this.overlay && prevProps.isOpen !== this.props.isOpen && this.props.isOpen === false) {
+            if (this.overlay &&
+                prevProps.isOpen !== this.props.isOpen &&
+                this.props.isOpen === false) {
                 await this.overlay.dismiss();
                 isDismissing = false;
                 this.forceUpdate();

@@ -24,7 +24,8 @@
     "tailwindcss": "^3.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
-    "nextjs-component-library": "*"
+    "nextjs-component-library": "*",
+    "create-react-component": "*"
   },
   "volta": {
     "node": "20.12.0"

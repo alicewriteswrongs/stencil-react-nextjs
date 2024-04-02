@@ -12,15 +12,19 @@ export const config: Config = {
     {
       type: 'dist-custom-elements',
     },
-    reactOutputTarget({
-      componentCorePackage: 'stencil-library',
-      proxiesFile: '../react-library/lib/components/stencil-generated/index.ts',
-      reactServerComponents: true,
-    }),
+    {
+      type: 'dist-hydrate-script',
+    },
+    // reactOutputTarget({
+    //   componentCorePackage: 'stencil-library',
+    //   proxiesFile: '../react-library/lib/components/stencil-generated/index.ts',
+    //   reactServerComponents: true,
+    // }),
     nextJSOutputTarget({
       componentCorePackage: 'stencil-library',
       outDir: '../nextjs-component-library/src',
       customElementsDir: 'dist/components',
+      hydrateScriptDir: 'hydrate',
     }),
   ],
   testing: {

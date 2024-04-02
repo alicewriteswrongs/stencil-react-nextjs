@@ -27,7 +27,6 @@ export class MyComponent {
   }
 
   render() {
-    console.log('ive been called');
     return <div>Hello, World! I'm {this.getText()}</div>;
   }
 }

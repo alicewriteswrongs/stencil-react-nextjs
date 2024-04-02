@@ -18,11 +18,20 @@ export function htmlToReactElements(html: string) {
 }
 
 function elToReactElement(
-  el: Element,
+  el: Element | null,
 ): ReturnType<typeof createElement> | string {
+  if (!el) {
+    // @ts-ignore
+    return null;
+  }
   // if it's a text child
   if (el.name === "text") {
     return (el as unknown as Text).data;
+  }
+
+  // @ts-ignore
+  if (el.type === "html") {
+    return elToReactElement(el.firstChild as Element | null);
   }
 
   return createElement(

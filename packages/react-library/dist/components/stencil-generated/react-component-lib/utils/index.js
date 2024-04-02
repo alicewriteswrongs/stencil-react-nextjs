@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 export const setRef = (ref, value) => {
-    if (typeof ref === 'function') {
+    if (typeof ref === "function") {
         ref(value);
     }
     else if (ref != null) {
@@ -22,10 +22,12 @@ export const createForwardRef = (ReactComponent, displayName) => {
     return React.forwardRef(forwardRef);
 };
 export const defineCustomElement = (tagName, customElement) => {
-    if (customElement !== undefined && typeof customElements !== 'undefined' && !customElements.get(tagName)) {
+    if (customElement !== undefined &&
+        typeof customElements !== "undefined" &&
+        !customElements.get(tagName)) {
         customElements.define(tagName, customElement);
     }
 };
-export * from './attachProps';
-export * from './case';
+export * from "./attachProps";
+export * from "./case";
 //# sourceMappingURL=index.js.map
