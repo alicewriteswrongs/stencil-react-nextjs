@@ -26,7 +26,7 @@ export declare const createOverlayComponent: <
   React.PropsWithoutRef<
     OverlayComponent &
       ReactOverlayProps & {
-        forwardedRef?: StencilReactForwardedRef<OverlayType>;
+        forwardedRef?: StencilReactForwardedRef<OverlayType> | undefined;
       }
   > &
     React.RefAttributes<OverlayType>

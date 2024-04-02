@@ -15,10 +15,12 @@ export declare const createReactComponent: <
 >(
   tagName: string,
   ReactComponentContext?: React.Context<ContextStateType>,
-  manipulatePropsFunction?: (
-    originalProps: StencilReactInternalProps<ElementType>,
-    propsToPass: any,
-  ) => ExpandedPropsTypes,
+  manipulatePropsFunction?:
+    | ((
+        originalProps: StencilReactInternalProps<ElementType>,
+        propsToPass: any,
+      ) => ExpandedPropsTypes)
+    | undefined,
   defineCustomElement?: () => void,
 ) => React.ForwardRefExoticComponent<
   React.PropsWithoutRef<
