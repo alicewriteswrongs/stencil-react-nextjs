@@ -16,7 +16,8 @@
   "scripts": {
     "test": "node ./__tests__/react-library.test.js",
     "build": "npm run tsc",
-    "tsc": "tsc -p . --outDir ./dist"
+    "tsc": "tsc -p . --outDir ./dist",
+    "prettier": "prettier --write --print-width 80 \"*.json\" \"**/*.tsx\" \"**/*.ts\""
   },
   "files": [
     "dist"
