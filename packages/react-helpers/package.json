@@ -15,6 +15,8 @@
     "node": "20.12.0"
   },
   "dependencies": {
-    "htmlparser2": "^9.1.0"
+    "htmlparser2": "^9.1.0",
+    "@types/react": "^18.2.73",
+    "react": "^18.2.0"
   }
 }
