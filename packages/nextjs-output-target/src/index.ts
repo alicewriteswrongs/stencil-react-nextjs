@@ -1,1 +1,1 @@
-export function nextJSOutputTarget() {}
+export { nextJSOutputTarget } from "./output-target";

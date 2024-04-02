@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prettier": "prettier --write --print-width 80 \"*.json\" \"**/*.ts\""
+    "prettier": "prettier --write --print-width 80 \"*.json\" \"**/*.ts\" \"**/*.tsx\""
   },
   "keywords": [],
   "author": "",
@@ -15,9 +16,11 @@
     "node": "20.12.0"
   },
   "dependencies": {
-    "react-helpers": "*",
+    "@stencil/core": "^4.7.0",
     "@types/react": "^18.2.73",
+    "esbuild": "^0.20.2",
     "react": "^18.2.0",
+    "react-helpers": "*",
     "typescript": "^5.4.3"
   }
 }
