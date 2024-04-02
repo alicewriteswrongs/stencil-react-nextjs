@@ -3,8 +3,6 @@ import type {
   CompilerCtx,
   ComponentCompilerMeta,
   Config,
-  CopyResults,
-  OutputTargetDist,
 } from "@stencil/core/internal";
 import { OutputTargetNextJS } from "./types";
 import { dashToPascalCase, normalizePath } from "./utils";
@@ -18,52 +16,84 @@ export async function emitNextJSComponents(
   buildCtx: BuildCtx,
 ) {
   for (const component of buildCtx.components) {
-    // do stuff here
-    const lines: string[] = [];
-
-    const pascalName = dashToPascalCase(component.tagName);
-    // first add import for the defineCustomElement function for component
-    lines.push(
-      `import { defineCustomElement as define${pascalName} } from '${normalizePath(
-        outputTarget.componentCorePackage!,
-      )}/${outputTarget.customElementsDir || "components"}/${component.tagName}.js';`,
+    const wrappedComponentName = await emitClientComponent(
+      outputTarget,
+      component,
     );
+    await emitServerComponent(outputTarget, component, wrappedComponentName);
+  }
+}
 
-    // add import for the utils
-    lines.push(
-      `import { createReactComponent, reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'`,
-    );
+/**
+ * Generate an ESModule containing a client-side only version of the component
+ * and write it to disk.
+ */
+async function emitClientComponent(
+  outputTarget: OutputTargetNextJS,
+  component: ComponentCompilerMeta,
+): Promise<string> {
+  const lines: string[] = [];
 
-    // add import for React utils
-    lines.push(`import { Suspense, lazy } from 'react';`);
+  const pascalName = dashToPascalCase(component.tagName);
+  const wrappedComponentName = `${pascalName}Wrapped`;
+  const defineFunctionName = `define${pascalName}`;
 
-    // TODO add import for hydrate app
+  // client component
+  lines.push(`"use client";`);
 
-    lines.push(`
-export default function ${pascalName} (props) {
+  // first add import for the defineCustomElement function for component
+  lines.push(
+    `import { defineCustomElement as ${defineFunctionName} } from '${normalizePath(
+      outputTarget.componentCorePackage!,
+    )}/${outputTarget.customElementsDir || "components"}/${component.tagName}.js';`,
+  );
+
+  // add import for the createReactComponent
+  lines.push(`import { createReactComponent } from 'create-react-component'`);
+
+  lines.push(`
+// TODO add type stuff here (we're going to just output JS to get started)
+export default ${wrappedComponentName} = /*@__PURE__*/createReactComponent(
+  '${component.tagName}',
+  undefined,
+  undefined,
+  ${defineFunctionName}
+);`);
+  const modulePath = join(outputTarget.outDir, `${wrappedComponentName}.js`);
+  await writeFile(modulePath, lines.join("\n"));
+  return wrappedComponentName;
+}
+
+async function emitServerComponent(
+  outputTarget: OutputTargetNextJS,
+  component: ComponentCompilerMeta,
+  wrappedComponentName: string,
+) {
+  const lines: string[] = [];
+
+  const pascalName = dashToPascalCase(component.tagName);
+  const lazyPascalName = `Lazy${pascalName}`;
+
+  // add import for next.js 'dynamic' function
+  // see https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#nextdynamic
+  lines.push(`import dynamic from 'next/dynamic'`);
+  // add import for our helpers
+  lines.push(
+    `import { reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'`,
+  );
+
+  // TODO add import for hydrate app
+  lines.push(`
+export default async function ${pascalName} (props) {
   // PLACEHOLDER
   const html = "<div>SERVER HTML</div>";
 
-  // TODO add type stuff here (we're going to just output JS to get started)
-  const Wrapped${pascalName} = /*@__PURE__*/createReactComponent(
-    '${component.tagName}',
-    undefined,
-    undefined,
-    define${pascalName}
-  );
-
-  const Lazy${pascalName} = lazy(async () => {
-    // this code will only run on the client
-    define${pascalName}();
-    return {
-      default: Wrapped${pascalName}
-    }
-  })
-
-  return <Suspense fallback={renderedHTMLToJSX(html)}><LazyMyComponent /></Suspense>;
+  const ${lazyPascalName} = dynamic(() => import("./${wrappedComponentName}.js"), {
+    loading: () => renderedHTMLToJSX(html)
+  });
+  return <${lazyPascalName} />;
 }
 `);
-    const componentPath = join(outputTarget.outDir, `${pascalName}.js`);
-    await writeFile(componentPath, lines.join("\n"));
-  }
+  const componentPath = join(outputTarget.outDir, `${pascalName}.js`);
+  await writeFile(componentPath, lines.join("\n"));
 }

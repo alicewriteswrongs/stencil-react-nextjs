@@ -1,26 +1,16 @@
-import { defineCustomElement as defineMyComponent } from 'stencil-library/dist/my-component.js';
-import { createReactComponent, reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'
-import { Suspense, lazy } from 'react';
+import dynamic from 'next/dynamic'
+import { headers } from 'next/headers.js';
+import { reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'
 
-export default function MyComponent (props) {
+export default async function MyComponent (props) {
   // PLACEHOLDER
   const html = "<div>SERVER HTML</div>";
 
-  // TODO add type stuff here (we're going to just output JS to get started)
-  const WrappedMyComponent = /*@__PURE__*/createReactComponent(
-    'my-component',
-    undefined,
-    undefined,
-    defineMyComponent
-  );
+  const LazyMyComponent = dynamic(async () => import("./MyComponentWrapped.js"), {
+    loading: () => <div>damn it</div>
+  });
 
-  const LazyMyComponent = lazy(async () => {
-    // this code will only run on the client
-    defineMyComponent();
-    return {
-      default: WrappedMyComponent
-    }
-  })
+  headers();
 
-  return <Suspense fallback={renderedHTMLToJSX(html)}><LazyMyComponent /></Suspense>;
+  return <LazyMyComponent />;
 }

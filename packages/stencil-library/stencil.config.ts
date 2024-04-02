@@ -20,7 +20,7 @@ export const config: Config = {
     nextJSOutputTarget({
       componentCorePackage: 'stencil-library',
       outDir: '../nextjs-component-library/src',
-      customElementsDir: 'dist',
+      customElementsDir: 'dist/components',
     }),
   ],
   testing: {

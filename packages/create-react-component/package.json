@@ -1,12 +1,13 @@
 {
-  "name": "nextjs-output-target",
+  "name": "create-react-component",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prettier": "prettier --write --print-width 80 \"*.json\" \"**/*.ts\" \"**/*.tsx\""
+    "prettier": "prettier --write --print-width 80 \"*.json\" \"**/*.ts\""
   },
   "keywords": [],
   "author": "",
@@ -15,12 +16,9 @@
     "node": "20.12.0"
   },
   "dependencies": {
-    "@stencil/core": "^4.7.0",
+    "htmlparser2": "^9.1.0",
     "@types/react": "^18.2.73",
-    "esbuild": "^0.20.2",
     "react": "^18.2.0",
-    "react-helpers": "*",
-    "next": "14.1.4",
     "typescript": "^5.4.3"
   }
 }
