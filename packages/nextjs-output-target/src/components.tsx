@@ -60,7 +60,7 @@ export default function ${pascalName} (props) {
     }
   })
 
-  return Suspense fallback={renderedHTMLToJSX(html)}><LazyMyComponent /></Suspense>;
+  return <Suspense fallback={renderedHTMLToJSX(html)}><LazyMyComponent /></Suspense>;
 }
 `);
     const componentPath = join(outputTarget.outDir, `${pascalName}.js`);
