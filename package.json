@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "lerna run build && lerna run start --scope next-app",
-    "dev": "lerna run build && lerna run dev",
+    "build": "lerna run build",
+    "dev": "npm run build && lerna run dev",
     "prettier": "lerna run prettier"
   }
 }
