@@ -11,7 +11,7 @@ interface StencilReactInternalProps<ElementType> extends React.HTMLAttributes<El
   ref?: React.Ref<any>;
 }
 
-export const createReactComponent = <
+export const oldcreateReactComponent = <
   PropType,
   ElementType extends HTMLStencilElement,
   ContextStateType = {},
@@ -91,3 +91,17 @@ export const createReactComponent = <
 
   return createForwardRef<PropType, ElementType>(ReactComponent, displayName);
 };
+
+
+
+
+import type { EventName } from '@lit/react';
+import { createComponent as createComponentWrapper, Options } from '@lit/react';
+
+export const createReactComponent = <T extends HTMLElement, E extends Record<string, EventName | string>>({ defineCustomElement, ...options }: Options<T, E> & { defineCustomElement: () => void }) => {
+    if (typeof defineCustomElement !== 'undefined') {
+        defineCustomElement();
+    }
+    return createComponentWrapper<T, E>(options);
+};
+

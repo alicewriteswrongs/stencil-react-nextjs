@@ -16,10 +16,11 @@ export default async function MyComponent (props) {
 
   const templateTag = html.match(templateRegex)[0];
 
+
   const LazyMyComponent = dynamic(() => import("./MyComponentWrapped.js"), {
-    loading: () => htmlToReactElements(
-      "<div>" + styleTag + templateTag + "</div>"
-    )
+    loading: () => <span dangerouslySetInnerHTML={{
+      __html: "<div>" + styleTag + templateTag + "</div>"
+    }} />
   });
   return <LazyMyComponent />;
 }

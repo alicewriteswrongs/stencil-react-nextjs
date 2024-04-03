@@ -43,22 +43,23 @@ async function emitClientComponent(
 
   // first add import for the defineCustomElement function for component
   lines.push(
-    `import { defineCustomElement as ${defineFunctionName} } from '${normalizePath(
+    `import { defineCustomElement as ${defineFunctionName}, ${pascalName} } from '${normalizePath(
       outputTarget.componentCorePackage!,
     )}/${outputTarget.customElementsDir || "components"}/${component.tagName}.js';`,
   );
 
   // add import for the createReactComponent
   lines.push(`import { createReactComponent } from 'create-react-component'`);
+  lines.push(`import React from 'react'`);
 
   lines.push(`
 // TODO add type stuff here (we're going to just output JS to get started)
-const ${wrappedComponentName} = /*@__PURE__*/createReactComponent(
-  '${component.tagName}',
-  undefined,
-  undefined,
-  ${defineFunctionName}
-);
+const ${wrappedComponentName} = /*@__PURE__*/createReactComponent({
+  tagName: '${component.tagName}',
+  elementClass: ${pascalName},
+  react: React,
+  defineCustomElement: ${defineFunctionName}
+});
 export default ${wrappedComponentName};
 `);
   const modulePath = join(outputTarget.outDir, `${wrappedComponentName}.js`);
@@ -102,10 +103,11 @@ export default async function ${pascalName} (props) {
 
   const templateTag = html.match(templateRegex)[0];
 
+
   const ${lazyPascalName} = dynamic(() => import("./${wrappedComponentName}.js"), {
-    loading: () => htmlToReactElements(
-      "<div>" + styleTag + templateTag + "</div>"
-    )
+    loading: () => <span dangerouslySetInnerHTML={{
+      __html: "<div>" + styleTag + templateTag + "</div>"
+    }} />
   });
   return <${lazyPascalName} />;
 }
