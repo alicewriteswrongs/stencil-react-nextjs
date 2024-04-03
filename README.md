@@ -1,7 +1,7 @@
 # stencil-react-nextjs
 
-An example project pulling together Stencil and NextJS via the React Output
-Target wrappers.
+An example project pulling together Stencil and NextJS via a custom
+nextjs-specific output target.
 
 To run locally do:
 
