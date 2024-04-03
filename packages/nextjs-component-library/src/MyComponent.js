@@ -7,7 +7,7 @@ const STYLE_REGEX = /<style.+<\/style>/;
 export default async function MyComponent (props) {
   // TODO
   // dynamic insert the right props here
-  const rawHTML = '<my-component name="what!!!"></my-component>';
+  const rawHTML = '<my-component first="rendering on the server"></my-component>';
   const { html } = await renderToString(rawHTML);
 
   const styleTag = html.match(STYLE_REGEX)?.[0];
@@ -22,5 +22,5 @@ export default async function MyComponent (props) {
       __html: "<div>" + styleTag + templateTag + "</div>"
     }} />
   });
-  return <LazyMyComponent />;
+  return <LazyMyComponent {...props} />;
 }

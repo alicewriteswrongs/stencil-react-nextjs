@@ -94,7 +94,7 @@ const STYLE_REGEX = /<style.+<\\/style>/;
 export default async function ${pascalName} (props) {
   // TODO
   // dynamic insert the right props here
-  const rawHTML = '<${component.tagName} name="what!!!"></${component.tagName}>';
+  const rawHTML = '<${component.tagName} first="rendering on the server"></${component.tagName}>';
   const { html } = await renderToString(rawHTML);
 
   const styleTag = html.match(STYLE_REGEX)?.[0];
@@ -109,7 +109,7 @@ export default async function ${pascalName} (props) {
       __html: "<div>" + styleTag + templateTag + "</div>"
     }} />
   });
-  return <${lazyPascalName} />;
+  return <${lazyPascalName} {...props} />;
 }
 `);
   const componentPath = join(outputTarget.outDir, `${pascalName}.js`);
