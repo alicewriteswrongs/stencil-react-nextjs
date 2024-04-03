@@ -12,15 +12,17 @@ export default async function MyComponent (props) {
 
   const styleTag = html.match(STYLE_REGEX)?.[0];
 
-  const templateRegex = new RegExp("<my-component.+</my-component>")
+  const templateRegex = new RegExp("<my-component.*?>(.+)</my-component>")
 
-  const templateTag = html.match(templateRegex)[0];
-
+  const templateTag = html.match(templateRegex)[1];
 
   const LazyMyComponent = dynamic(() => import("./MyComponentWrapped.js"), {
-    loading: () => <span dangerouslySetInnerHTML={{
-      __html: "<div>" + styleTag + templateTag + "</div>"
-    }} />
+    loading: () => <my-component suppressHydrationErrors>
+      <template shadowrootmode="open" dangerouslySetInnerHTML={{
+        __html: styleTag + templateTag
+      }} />
+    </my-component>,
+    ssr: false
   });
-  return <LazyMyComponent {...props} />;
+  return <LazyMyComponent suppressHydrationErrors {...props} />;
 }

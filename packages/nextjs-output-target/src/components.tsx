@@ -99,17 +99,19 @@ export default async function ${pascalName} (props) {
 
   const styleTag = html.match(STYLE_REGEX)?.[0];
 
-  const templateRegex = new RegExp("<${component.tagName}.+</${component.tagName}>")
+  const templateRegex = new RegExp("<${component.tagName}.*?>(.+)</${component.tagName}>")
 
-  const templateTag = html.match(templateRegex)[0];
-
+  const templateTag = html.match(templateRegex)[1];
 
   const ${lazyPascalName} = dynamic(() => import("./${wrappedComponentName}.js"), {
-    loading: () => <span dangerouslySetInnerHTML={{
-      __html: "<div>" + styleTag + templateTag + "</div>"
-    }} />
+    loading: () => <${component.tagName} suppressHydrationErrors>
+      <template shadowrootmode="open" dangerouslySetInnerHTML={{
+        __html: styleTag + templateTag
+      }} />
+    </${component.tagName}>,
+    ssr: false
   });
-  return <${lazyPascalName} {...props} />;
+  return <${lazyPascalName} suppressHydrationErrors {...props} />;
 }
 `);
   const componentPath = join(outputTarget.outDir, `${pascalName}.js`);
