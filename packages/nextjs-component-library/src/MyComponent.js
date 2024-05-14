@@ -1,28 +1,35 @@
-import dynamic from 'next/dynamic'
-import { reactPropsToStencilHTML, htmlToReactElements } from 'react-helpers'
 import { renderToString } from './hydrate';
+import { defineCustomElement as defineMyComponent, MyComponentSC } from 'stencil-library/dist/components/my-component.js';
+import { createReactComponent } from 'create-react-component'
+import React from 'react'
 
-const STYLE_REGEX = /<style.+<\/style>/;
+const MyComponent = typeof globalThis.window !== 'undefined'
+    ? createReactComponent({
+        tagName: 'my-component',
+        elementClass: MyComponentSC,
+        react: React,
+        events: {},
+        defineCustomElement: defineMyComponent
+    })
+    :
+    /**
+     * export serialized version of component for server side rendering
+     */
+    async (props) => {
+        const { html } = await renderToString(
+            `<my-component first="rendering on the server"></my-button>`
+        );
+        const templateTag = html.slice(
+            html.indexOf('<body>') + '<body>'.length,
+            -('</body></html>'.length)
+        );
+        return (
+            <my-component>
+                <template suppressHydrationWarning shadowrootmode="open" dangerouslySetInnerHTML={{
+                    __html: templateTag
+                }} />
+            </my-component>
+        )
+    }
 
-export default async function MyComponent (props) {
-  // TODO
-  // dynamic insert the right props here
-  const rawHTML = '<my-component first="rendering on the server"></my-component>';
-  const { html } = await renderToString(rawHTML);
-
-  const styleTag = html.match(STYLE_REGEX)?.[0];
-
-  const templateRegex = new RegExp("<my-component.*?>(.+)</my-component>")
-
-  const templateTag = html.match(templateRegex)[1];
-
-  const LazyMyComponent = dynamic(() => import("./MyComponentWrapped.js"), {
-    loading: () => <my-component suppressHydrationErrors>
-      <template shadowrootmode="open" dangerouslySetInnerHTML={{
-        __html: styleTag + templateTag
-      }} />
-    </my-component>,
-    ssr: false
-  });
-  return <LazyMyComponent suppressHydrationErrors {...props} />;
-}
+export default MyComponent
